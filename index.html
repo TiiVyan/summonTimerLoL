@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Timer de summoners</title>
+    <style>
+        body, html{
+            height: 100%;
+
+        }
+        body{
+            background: rgb(0,1,0);
+            background: linear-gradient(90deg, rgba(0,1,0,1) 0%, rgba(24,19,74,1) 66%);
+            
+            
+          
+            
+            color: aliceblue;
+            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+            margin: 0;
+            height: auto;
+            overflow-x: hidden;
+            
+            
+        }
+        h1, h3{
+            text-align: left;
+            font-size: 1em;
+            margin-top: 5px;
+            margin-bottom: 5px;
+            margin-left: 18px;
+        }
+        .lane, .listaDeSummonsClass{
+            
+            display: flex;
+            align-items: center;
+            height: auto;
+            padding-left: 10px;
+            flex-wrap: wrap;
+            overflow-y: scroll;
+            
+        }
+
+        .lane{
+
+            margin-bottom: 10px;
+            margin-top: 10px;
+            position: relative;
+             
+        }
+
+        
+        .img-container{
+            
+            height: 70px;
+            width: 70px;
+            
+            margin-right: 5px;
+            
+            
+        }
+
+        .img-container img {
+
+            width: 70px;
+            height: 70px;
+
+        }
+        
+        .summoner, .chooseSummon{
+            
+            height: 60px;
+            width: 60px;
+            background-color: aliceblue;
+            margin: 5px;
+            border: black solid 3px;
+        }
+        .summoner:hover{
+            box-shadow: inset 0px 0px 15px 1px #000000;
+            
+
+        }
+        
+        #cajaSpellsId .imagen:hover{
+            background-color: red;
+
+
+        }
+        .cajaSpells{
+            display: flex;
+            flex-wrap: wrap;
+            
+            background-color: rgba(0, 0, 0, 1);
+            height: 170px;
+            width: 200px;
+            padding: 5px;
+            justify-content: center;
+            align-content: center;
+            z-index: 999;
+        
+        }
+
+        .chooseSummon{
+            outline-style: none;
+            opacity: 0.4; 
+        }
+
+        
+
+        #tp, #flash, #ext, #heal, #smite, #ignite, #barrier, #clarity, #ghost {
+            background-size: cover;
+            height: 50px;
+            width: 50px;
+            border-radius: 0;
+            appearance: none;
+            
+
+        }
+
+        #flash {
+            background-image: url(https://static.wikia.nocookie.net/leagueoflegends/images/3/36/Teleport_Enchant_%28Wild_Rift%29_item.png/revision/latest/smart/width/200/height/200?cb=20200713122319);
+            
+        }
+        #tp{
+            background-image: url(https://www.hiepsibaotap.com/wp-content/uploads/2018/11/Flash_HD.png);
+            
+        }
+
+        /*PRUEBA*/
+        
+        /*FIN PRUEBA*/
+
+        #ext{
+            background-image: url(https://cdn.boop.pl/uploads/2019/11/368930-small.png);
+            
+        }
+        #heal{
+            background-image: url(https://static.wikia.nocookie.net/leagueoflegendsoficial/images/6/6e/Heal.png/revision/latest/smart/width/200/height/200?cb=20190518002554&path-prefix=es);
+            
+        }
+        
+        #smite{
+            background-image: url(data:image/jpeg;base64,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);
+        }
+        #barrier{
+            background-image: url(https://static.wikia.nocookie.net/leagueoflegends/images/0/05/Barrera.png/revision/latest/smart/width/200/height/200?cb=20141013024605&path-prefix=es);
+            
+        }
+        #ignite{
+            background-image: url(https://static.wikia.nocookie.net/leagueoflegends/images/0/00/Ignici%C3%B3n.png/revision/latest/smart/width/200/height/200?cb=20141013032508&path-prefix=es);
+            
+        }
+        #ghost{
+            background-image: url(https://static.wikia.nocookie.net/leagueoflegendsoficial/images/a/ab/Ghost.png/revision/latest/smart/width/200/height/200?cb=20190517213353&path-prefix=es);
+            
+        }
+        #clarity{
+            background-image: url(https://static.wikia.nocookie.net/leagueoflegendsoficial/images/9/95/Cleanse.png/revision/latest/smart/width/200/height/200?cb=20190517234821&path-prefix=es);
+            
+        }
+        
+
+        .chooseSummon:checked {
+    
+            opacity: 1.0;
+           
+    
+        }
+        .button{
+            
+            outline-style: none;
+            height: 3rem;
+            width: 30%;
+            margin: 5px;
+            margin-left: 18px;
+            background-color: rgba(0, 0, 0, 0);
+            color: aliceblue;
+            border-style: solid;
+        }
+
+        .contador{
+            position: absolute;
+            left:86px;
+
+        }
+
+    </style>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+</head>
+<body>
+    <h1>TIMER DE SUMMONERS</h1>
+    <h3>Para manquitos que no saben contar</h3>
+    
+    <button class="button" onclick="elegirSummons()">ELEGIR SUMMONS</button>
+    <div class="contenedor-padre">
+        <div class="lane" id="top">
+            <div class="img-container">
+                <img src="https://static.wikia.nocookie.net/leagueoflegends/images/e/ef/Top_icon.png/revision/latest?cb=20181117143602" class = "imagen" alt="TOP-ICON">
+            </div>
+            <input type="checkbox" id="tp" name="tp" value="0" class="chooseSummon" onclick="switchValue(this)"  baseTime = "300">
+            <input type="checkbox" id="flash" name="flash" value="0" class="chooseSummon" onclick="switchValue(this)" baseTime = "420">
+            <input type="checkbox" id="ext" name="ext" value="0" class="chooseSummon" onclick="switchValue(this)" baseTime = "210">
+            <input type="checkbox" id="heal" name="heal" value="0" class="chooseSummon" onclick="switchValue(this)" baseTime = "240">
+            <input type="checkbox" id="smite" name="smite" value="0" class="chooseSummon" onclick="switchValue(this)" baseTime = "90">
+            <input type="checkbox" id="barrier" name="barrier" value="0" class="chooseSummon" onclick="switchValue(this)" baseTime = "180">
+            <input type="checkbox" id="ignite" name="ignite" value="0" class="chooseSummon" onclick="switchValue(this)" baseTime = "180">
+            <input type="checkbox" id="ghost" name="ghost" value="0" class="chooseSummon" onclick="switchValue(this)" baseTime = "210">
+            <input type="checkbox" id="clarity" name="clarity" value="0" class="chooseSummon" onclick="switchValue(this)" baseTime = "210">
+        </div>
+        <div class="lane" id="jg">
+            <div class="img-container">
+                <img src="https://static.wikia.nocookie.net/leagueoflegends/images/1/1b/Jungle_icon.png/revision/latest?cb=20181117143559" class = "imagen" alt="JG-ICON">
+            </div>
+            <input type="checkbox" id="tp" name="tp" value="0" class="chooseSummon" onclick="switchValue(this)"  baseTime = "300">
+            <input type="checkbox" id="flash" name="flash" value="0" class="chooseSummon" onclick="switchValue(this)" baseTime = "420">
+            <input type="checkbox" id="ext" name="ext" value="0" class="chooseSummon" onclick="switchValue(this)" baseTime = "210">
+            <input type="checkbox" id="heal" name="heal" value="0" class="chooseSummon" onclick="switchValue(this)" baseTime = "240">
+            <input type="checkbox" id="smite" name="smite" value="0" class="chooseSummon" onclick="switchValue(this)" baseTime = "90">
+            <input type="checkbox" id="barrier" name="barrier" value="0" class="chooseSummon" onclick="switchValue(this)" baseTime = "180">
+            <input type="checkbox" id="ignite" name="ignite" value="0" class="chooseSummon" onclick="switchValue(this)" baseTime = "180">
+            <input type="checkbox" id="ghost" name="ghost" value="0" class="chooseSummon" onclick="switchValue(this)" baseTime = "210">
+            <input type="checkbox" id="clarity" name="clarity" value="0" class="chooseSummon" onclick="switchValue(this)" baseTime = "210">
+            
+        </div>
+        <div class="lane" id="mid">
+            <div class="img-container">
+                <img src="https://static.wikia.nocookie.net/leagueoflegends/images/9/98/Middle_icon.png/revision/latest?cb=20181117143644" class = "imagen" alt="MID-ICON">
+            </div>
+            <input type="checkbox" id="tp" name="tp" value="0" class="chooseSummon" onclick="switchValue(this)"  baseTime = "300">
+            <input type="checkbox" id="flash" name="flash" value="0" class="chooseSummon" onclick="switchValue(this)" baseTime = "420">
+            <input type="checkbox" id="ext" name="ext" value="0" class="chooseSummon" onclick="switchValue(this)" baseTime = "210">
+            <input type="checkbox" id="heal" name="heal" value="0" class="chooseSummon" onclick="switchValue(this)" baseTime = "240">
+            <input type="checkbox" id="smite" name="smite" value="0" class="chooseSummon" onclick="switchValue(this)" baseTime = "90">
+            <input type="checkbox" id="barrier" name="barrier" value="0" class="chooseSummon" onclick="switchValue(this)" baseTime = "180">
+            <input type="checkbox" id="ignite" name="ignite" value="0" class="chooseSummon" onclick="switchValue(this)" baseTime = "180">
+            <input type="checkbox" id="ghost" name="ghost" value="0" class="chooseSummon" onclick="switchValue(this)" baseTime = "210">
+            <input type="checkbox" id="clarity" name="clarity" value="0" class="chooseSummon" onclick="switchValue(this)" baseTime = "210">
+        </div>
+        <div class="lane" id="adc">
+            <div class="img-container">
+                <img src="https://static.wikia.nocookie.net/leagueoflegends/images/9/97/Bottom_icon.png/revision/latest?cb=20181117143632" class = "imagen" alt="ADC-ICON">
+            </div>
+            <input type="checkbox" id="tp" name="tp" value="0" class="chooseSummon" onclick="switchValue(this)"  baseTime = "300">
+            <input type="checkbox" id="flash" name="flash" value="0" class="chooseSummon" onclick="switchValue(this)" baseTime = "420">
+            <input type="checkbox" id="ext" name="ext" value="0" class="chooseSummon" onclick="switchValue(this)" baseTime = "210">
+            <input type="checkbox" id="heal" name="heal" value="0" class="chooseSummon" onclick="switchValue(this)" baseTime = "240">
+            <input type="checkbox" id="smite" name="smite" value="0" class="chooseSummon" onclick="switchValue(this)" baseTime = "90">
+            <input type="checkbox" id="barrier" name="barrier" value="0" class="chooseSummon" onclick="switchValue(this)" baseTime = "180">
+            <input type="checkbox" id="ignite" name="ignite" value="0" class="chooseSummon" onclick="switchValue(this)" baseTime = "180">
+            <input type="checkbox" id="ghost" name="ghost" value="0" class="chooseSummon" onclick="switchValue(this)" baseTime = "210">
+            <input type="checkbox" id="clarity" name="clarity" value="0" class="chooseSummon" onclick="switchValue(this)" baseTime = "210">
+        </div>
+        <div class="lane" id="supp">
+            <div class="img-container">
+                <img src="https://static.wikia.nocookie.net/leagueoflegends/images/e/e0/Support_icon.png/revision/latest?cb=20181117143601" class = "imagen" alt="SUPP-ICON">
+            </div>
+            <input type="checkbox" id="tp" name="tp" value="0" class="chooseSummon" onclick="switchValue(this)"  baseTime = "300">
+            <input type="checkbox" id="flash" name="flash" value="0" class="chooseSummon" onclick="switchValue(this)" baseTime = "420">
+            <input type="checkbox" id="ext" name="ext" value="0" class="chooseSummon" onclick="switchValue(this)" baseTime = "210">
+            <input type="checkbox" id="heal" name="heal" value="0" class="chooseSummon" onclick="switchValue(this)" baseTime = "240">
+            <input type="checkbox" id="smite" name="smite" value="0" class="chooseSummon" onclick="switchValue(this)" baseTime = "90">
+            <input type="checkbox" id="barrier" name="barrier" value="0" class="chooseSummon" onclick="switchValue(this)" baseTime = "180">
+            <input type="checkbox" id="ignite" name="ignite" value="0" class="chooseSummon" onclick="switchValue(this)" baseTime = "180">
+            <input type="checkbox" id="ghost" name="ghost" value="0" class="chooseSummon" onclick="switchValue(this)" baseTime = "210">
+            <input type="checkbox" id="clarity" name="clarity" value="0" class="chooseSummon" onclick="switchValue(this)" baseTime = "210">
+        </div>
+        
+    </div>
+
+    <!-- <div class="lane" id="top">
+        <div class="img-container" id="top-img">
+            <button>
+                <img src="https://static.wikia.nocookie.net/leagueoflegends/images/e/ef/Top_icon.png/revision/latest?cb=20181117143602" class = "imagen" alt="TOP-ICON">
+            </button>
+        </div>
+        <div id="summtop1" class="summoner" >
+            <img src="https://i.pinimg.com/originals/f7/56/28/f7562810bf266c8f8a17a609ee660dde.png" class = "imagen" alt="SUMMONER-1-TOP">
+        </div>
+        <div id="summtop2" class="summoner">
+            <img src="https://i.pinimg.com/originals/f7/56/28/f7562810bf266c8f8a17a609ee660dde.png" class = "imagen" alt="SUMMONER-2-TOP">
+        </div>
+    </div> -->
+   
+    <!-- <div class="cajaSpells" id="cajaSpellsId">
+        <div id="flash" class="summoner">
+            <img src="https://www.hiepsibaotap.com/wp-content/uploads/2018/11/Flash_HD.png" class = "imagen" alt="SUMMONER-1-TOP">
+        </div>
+        <div id="extenuar" class="summoner">
+            <img src="https://static.wikia.nocookie.net/leagueoflegends/images/b/b9/Extenuaci%C3%B3n.png/revision/latest/smart/width/200/height/200?cb=20141012202308&path-prefix=es" class = "imagen" alt="SUMMONER-2-TOP">
+        </div>
+        <div id="heal" class="summoner">
+            <img src="https://static.wikia.nocookie.net/leagueoflegendsoficial/images/6/6e/Heal.png/revision/latest/smart/width/200/height/200?cb=20190518002554&path-prefix=es" class = "imagen" alt="SUMMONER-2-TOP">
+        </div>
+        <div id="tp" class="summoner">
+            <img src="https://static.wikia.nocookie.net/leagueoflegends/images/3/36/Teleport_Enchant_%28Wild_Rift%29_item.png/revision/latest/smart/width/200/height/200?cb=20200713122319" class = "imagen" alt="SUMMONER-2-TOP">
+        </div>
+    </div> -->
+
+    <script>
+        var esEscribible = 1;
+
+        var summonersCajas = document.getElementsByClassName("summoners");
+        var listaSummons = document.getElementById("listaDeSummons");
+        var inputs = document.getElementsByTagName("input");
+        var limit = 2;
+
+        
+
+        $('input[type=checkbox]').on('change', function(evt) {
+        
+        if($(this).siblings(':checked').length >= limit) {
+            this.checked = false;
+            this.value = "0";
+        }
+        });
+        
+        function switchValue(e){
+
+            if(e.checked == false && esEscribible == 0){
+
+                interval(e.getAttribute("baseTime"), e);
+                    
+
+                    
+                
+                e.value = 0;
+                return;
+
+            }else if (e.checked == true && esEscribible == 0){
+                
+                e.value = 1;
+
+            }
+            else if(e.value == "0"){
+                e.value = "1";
+            }else if(e.value == "1"){
+                e.value = "0";
+            }
+
+        }
+       
+        function interval(t, e){
+                
+                var contador = document.createElement("div");
+                contador.className = "contador";
+                e.parentNode.insertBefore(contador, e);
+                
+                var myvar;
+                myvar = setInterval(function(){
+                    contador.innerHTML = --t;
+                    if(t == 0 || e.value == 1){
+                       e.parentNode.removeChild(contador);
+                       $(e).prop("checked", true);
+                       e.value = 1;
+                       clearInterval(myvar); 
+                    }
+                    
+                    
+                },1000,"JavaScript");
+                
+                
+            
+            
+        }
+
+        function elegirSummons(){
+            if(esEscribible == 1){
+                console.log($('input[value=0]'));
+            $('input[value=0]').hide();
+            esEscribible = 0;
+            }
+
+            
+            
+        }
+
+        
+    </script>
+</body>
+</html>
